@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="main.css" />
+
+	<title>Laba-2</title>
+</head>
+
+<body>
+
+	<div class="panels">
+		<div class="left-panel">
+			<div class="inline-container">
+				<div class="product-search">
+					<input type="text" placeholder="Назва товару">
+					<button class="add" data-tooltip="Додати товар до списку">Додати</button>
+				</div>
+			</div>
+
+			<div class="products">
+				<div class="inline-container">
+					<div class="product">
+						<div class="product-name"><s>Помідори</s></div>
+						<div class="amount">
+							<div id="invisible">
+								<button class="minus" data-tooltip="Відняти">-</button>
+							</div>
+							<div class="product-amount">2</div>
+							<div id="invisible">
+								<button class="plus" data-tooltip="Додати">+</button>
+							</div>
+						</div>
+						<div class="acts">
+							<button class="btn-no-bought" data-tooltip="Не куплено">Не куплено</button>
+							<button class="btn-x" id="none" data-tooltip="Видалити">x</button>
+						</div>
+					</div>
+				</div>
+
+				<div class="inline-container">
+					<div class="product">
+						<div class="product-name">Печиво</div>
+						<div class="amount">
+							<div>
+								<button class="minus" data-tooltip="Відняти">-</button>
+							</div>
+							<div class="product-amount">2</div>
+							<div>
+								<button class="plus" data-tooltip="Додати">+</button>
+							</div>
+						</div>
+						<div class="acts">
+							<button class="btn-bought" data-tooltip="Куплено">Куплено</button>
+							<button class="btn-x" data-tooltip="Видалити">x</button>
+						</div>
+					</div>
+				</div>
+				<div class="inline-container">
+					<div class="product">
+						<div class="product-name"><div class="editing">Сир</div></div>
+						<div class="amount">
+							<div>
+								<button class="minus-unactive">-</button>
+							</div>
+							<div class="product-amount">1</div>
+							<div>
+								<button class="plus" data-tooltip="Додати">+</button>
+							</div>
+						</div>
+						<div class="acts">
+							<button class="btn-bought" data-tooltip="Куплено">Куплено</button>
+							<button class="btn-x" data-tooltip="Видалити">x</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="right-panel">
+			<div class="inline-container"><div class="caption">Залишилося</div></div>
+			<div class="inline-container">
+				<div class="product-list-remainder">
+					<div class="product-card">Печиво<div class="product-card-amount">2</div></div>
+					<div class="product-card">Сир<div class="product-card-amount">2</div></div>
+				</div>
+			</div>
+			<div class="inline-container"><div class="caption">Куплено</div></div>
+			<div class="inline-container">
+				<div class="product-list-bought">
+					<div class="product-card"><s>Помідори</s> <div class="product-card-amount"><s>2</s></div></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="badge">
+		<div class="badge-caption">
+			Buy List
+		</div>
+		<div class="badge-created-by">
+			Created by:
+			<div class="badge-author-name">
+				Baiush Oleksandr
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
