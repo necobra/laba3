@@ -136,6 +136,8 @@ function addProduct(event) {
             drawProduct(correctName, 1, false);
             // Очищуємо поле вводу
             productNameInput.value = '';
+            // оновлюєм масив продуктів
+            productArray.push(correctName, 1, false);
         }
     }
     // Перенаправляємо фокус на поле вводу
@@ -180,6 +182,13 @@ function markProductAsUnbought(event) {
     productCard.remove();
     document.querySelector('.product-list-remainder').appendChild(productCard);
     productCard.style.textDecoration = 'none';
+
+    // оновлюєм масив продуктів
+    let index = productArray.indexOf(name.textContent);
+    //productArray[index] = name.textContent;
+    //productArray[index+1] = product.querySelector('.product-amount').textContent;
+    productArray[index+2] = false;
+    localStorage.setItem('array', productArray);
 }
 
 // Функція для відміни відмітки товару як НЕ купленого
@@ -213,6 +222,13 @@ function markProductAsBought(event) {
     productCard.remove();
     document.querySelector('.product-list-bought').appendChild(productCard);
     productCard.style.textDecoration = 'line-through';
+
+    // оновлюєм масив продуктів
+    let index = productArray.indexOf(name.textContent);
+    //productArray[index] = name.textContent;
+    //productArray[index+1] = product.querySelector('.product-amount').textContent;
+    productArray[index+2] = true;
+    localStorage.setItem('array', productArray);
 }
 
 // Функція для видалення товару зі списку
@@ -224,6 +240,11 @@ function deleteProduct(event) {
     const name = product.querySelector('.product-name');
     const productCard = document.getElementById(name.textContent);
     productCard.remove();
+
+    // оновлюєм масив продуктів
+    let index = productArray.indexOf(name.textContent);
+    productArray.splice(index,3);
+    localStorage.setItem('array',productArray);
 }
 
 // Функція для редагування назви товару
@@ -258,6 +279,10 @@ function editProductName(event) {
 
         nameElement.textContent = correctNewNameStr;
         inputElement.remove();
+        // оновлюєм масив продуктів
+        let index = productArray.indexOf(nameStr);
+        productArray[index] = correctNewNameStr;
+        localStorage.setItem('array',productArray);
     });
 }
 
@@ -291,6 +316,11 @@ function editProductQuantity(event) {
     const productCard = document.getElementById(name.textContent);
     const amountDiv = productCard.getElementsByTagName('div')[0];
     amountDiv.textContent = count;
+
+    // оновлюєм масив продуктів
+    let index = productArray.indexOf(name.textContent);
+    productArray[index+1] = count;
+    localStorage.setItem('array', productArray);
 }
 
 
@@ -330,17 +360,19 @@ function updateStatistics() {
 
 // ресет даних
 function reset(){
-    let productArray = [['Помідори', 2, true], ['Печиво', 2, false], ['Сир', 1, false]]
-
-    for (let product of productArray) {
-        drawProduct(product[0], product[1], product[2]);
+    productArray = ['Помідори', 2, true, 'Печиво', 2, false, 'Сир', 1, false]
+    
+    let i = 0;
+    while (i < productArray.length){
+        drawProduct(productArray[i],productArray[i+1],productArray[i+2]==='true'?true:false)
+        i+=3;
     }
     localStorage.setItem("array", productArray);
 }
 
 // загрузка старих данних
 function loading(){
-    let productArray = localStorage.getItem("array").split(',');
+    productArray = localStorage.getItem("array").split(',');
     //console.log(productArray);
     let i = 0;
     while (i < productArray.length){
@@ -353,5 +385,5 @@ function resetLocalStorage(){
     localStorage.removeItem('array');
 }
 
-let productsDictionaty;
+let productArray;
 loading();
