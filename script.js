@@ -1,6 +1,5 @@
 function drawProduct(name, amount, isBought) {
     drawProductPanel(name, amount, isBought);
-    drawProductCard(name, amount, isBought);
 }
 
 function drawProductPanel(name, amount, isBought) {
@@ -115,11 +114,6 @@ function drawProductPanel(name, amount, isBought) {
     }
 }
 
-function drawProductCard(name, amount, isBought) {
-
-}
-
-
 // Додати
 const addButton = document.querySelector('.add');
 function addProduct(event) {
@@ -132,12 +126,16 @@ function addProduct(event) {
         const productCard = document.getElementById(correctName);
         if (!productCard) {
             // Якщо таке ім'я ще не існує
-            
+
             drawProduct(correctName, 1, false);
             // Очищуємо поле вводу
             productNameInput.value = '';
             // оновлюєм масив продуктів
-            productArray.push(correctName, 1, false);
+            if (productArray != null) {
+                productArray.push(correctName, '1', 'false');
+            }
+            else productArray = [correctName, '1', 'false'];
+            localStorage.setItem('array', productArray);
         }
     }
     // Перенаправляємо фокус на поле вводу
@@ -187,7 +185,7 @@ function markProductAsUnbought(event) {
     let index = productArray.indexOf(name.textContent);
     //productArray[index] = name.textContent;
     //productArray[index+1] = product.querySelector('.product-amount').textContent;
-    productArray[index+2] = false;
+    productArray[index + 2] = 'false';
     localStorage.setItem('array', productArray);
 }
 
@@ -227,7 +225,7 @@ function markProductAsBought(event) {
     let index = productArray.indexOf(name.textContent);
     //productArray[index] = name.textContent;
     //productArray[index+1] = product.querySelector('.product-amount').textContent;
-    productArray[index+2] = true;
+    productArray[index + 2] = 'true';
     localStorage.setItem('array', productArray);
 }
 
@@ -243,8 +241,8 @@ function deleteProduct(event) {
 
     // оновлюєм масив продуктів
     let index = productArray.indexOf(name.textContent);
-    productArray.splice(index,3);
-    localStorage.setItem('array',productArray);
+    productArray.splice(index, 3);
+    localStorage.setItem('array', productArray);
 }
 
 // Функція для редагування назви товару
@@ -255,35 +253,38 @@ function editProductName(event) {
     const nameStr = nameElement.textContent
     inputElement.value = nameStr;
     inputElement.classList.add('editing');
+    inputElement.style.display='block';
+    let index = productArray.indexOf(nameStr);
+    if (productArray[index + 2] === 'false') {
+        nameElement.textContent = null;
+        nameElement.appendChild(inputElement);
+        inputElement.focus();
 
-    nameElement.textContent = null;
-    nameElement.appendChild(inputElement);
-    inputElement.focus();
+        inputElement.addEventListener('blur', () => {
+            let newNameStr = inputElement.value;
+            let correctNewNameStr;
+            console.log(newNameStr);
+            if (!newNameStr) {
+                correctNewNameStr = nameStr[0];
+            }
+            else {
+                correctNewNameStr = newNameStr[0].toUpperCase() + newNameStr.substr(1).toLowerCase();
+            }
 
-    inputElement.addEventListener('blur', () => {
-        let newNameStr = inputElement.value;
-        let correctNewNameStr;
-        console.log(newNameStr);
-        if (!newNameStr) {
-            correctNewNameStr = nameStr[0];
-        }
-        else {
-            correctNewNameStr = newNameStr[0].toUpperCase() + newNameStr.substr(1).toLowerCase();
-        }
+            const productCard = document.getElementById(nameStr);
+            const amountDiv = productCard.getElementsByTagName('div')[0];
+            productCard.textContent = correctNewNameStr;
+            productCard.appendChild(amountDiv);
+            productCard.id = correctNewNameStr;
 
-        const productCard = document.getElementById(nameStr);
-        const amountDiv = productCard.getElementsByTagName('div')[0];
-        productCard.textContent = correctNewNameStr;
-        productCard.appendChild(amountDiv);
-        productCard.id = correctNewNameStr;
-
-        nameElement.textContent = correctNewNameStr;
-        inputElement.remove();
-        // оновлюєм масив продуктів
-        let index = productArray.indexOf(nameStr);
-        productArray[index] = correctNewNameStr;
-        localStorage.setItem('array',productArray);
-    });
+            nameElement.textContent = correctNewNameStr;
+            inputElement.remove();
+            // оновлюєм масив продуктів
+            index = productArray.indexOf(nameStr);
+            productArray[index] = correctNewNameStr;
+            localStorage.setItem('array', productArray);
+        });
+    }
 }
 
 // Функція для редагування кількості товару
@@ -319,7 +320,7 @@ function editProductQuantity(event) {
 
     // оновлюєм масив продуктів
     let index = productArray.indexOf(name.textContent);
-    productArray[index+1] = count;
+    productArray[index + 1] = count;
     localStorage.setItem('array', productArray);
 }
 
@@ -359,29 +360,30 @@ function updateStatistics() {
 }
 
 // ресет даних
-function reset(){
-    productArray = ['Помідори', 2, true, 'Печиво', 2, false, 'Сир', 1, false]
-    
-    let i = 0;
-    while (i < productArray.length){
-        drawProduct(productArray[i],productArray[i+1],productArray[i+2]==='true'?true:false)
-        i+=3;
-    }
+function reset() {
+    productArray = ['Помідори', '2', 'true', 'Печиво', '2', 'false', 'Сир', '1', 'false']
+
     localStorage.setItem("array", productArray);
+    loading();
 }
 
 // загрузка старих данних
-function loading(){
+function loading() {
     productArray = localStorage.getItem("array").split(',');
-    //console.log(productArray);
-    let i = 0;
-    while (i < productArray.length){
-        drawProduct(productArray[i],productArray[i+1],productArray[i+2]==='true'?true:false)
-        i+=3;
+    console.log(productArray);
+    if (productArray < 3) {
+        productArray = null;
+    }
+    else {
+        let i = 0;
+        while (i < productArray.length) {
+            drawProduct(productArray[i], productArray[i + 1], productArray[i + 2] === 'true' ? true : false)
+            i += 3;
+        }
     }
 }
 
-function resetLocalStorage(){
+function resetLocalStorage() {
     localStorage.removeItem('array');
 }
 
